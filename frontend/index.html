@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <title>피부 질환 진단</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>피부가 폭삭 삭았수다</h2>
+        <form id="diagnosis-form" enctype="multipart/form-data">
+            <label>성별:</label>
+            <select name="gender" required>
+                <option value="sex_male">남성</option>
+                <option value="sex_female">여성</option>
+            </select>
+
+            <label>나이:</label>
+            <select name="age" required>
+                <option value="0">0~9</option>
+                <option value="1">10~19</option>
+                <option value="2">20~29</option>
+                <option value="3">30~39</option>
+                <option value="4">40~49</option>
+                <option value="5">50~59</option>
+                <option value="6">60~69</option>
+                <option value="7">70~79</option>
+                <option value="8">80~89</option>
+                <option value="9">90~99</option>
+                <option value="10">알 수 없음</option>
+            </select>
+
+            <label>사진 부위:</label>
+            <select name="body_part" required>
+                <option value="body_parts_head_or_neck">머리/목</option>
+                <option value="body_parts_arm">팔</option>
+                <option value="body_parts_palm">손바닥</option>
+                <option value="body_parts_back_of_hand">손등</option>
+                <option value="body_parts_torso_front">가슴/복부</option>
+                <option value="body_parts_torso_back">등</option>
+                <option value="body_parts_genitalia_or_groin">생식기/사타구니</option>
+                <option value="body_parts_buttocks">엉덩이</option>
+                <option value="body_parts_leg">다리</option>
+                <option value="body_parts_foot_top_or_side">발 등/측면</option>
+                <option value="body_parts_foot_sole">발바닥</option>
+                <option value="body_parts_other">기타</option>
+            </select>
+
+            <label>사진 업로드:</label>
+            <input type="file" name="image" accept="image/*" capture="environment" required>
+
+            <button type="submit">예측하기</button>
+        </form>
+
+        <!-- 🔵 로딩 메시지 -->
+        <div id="loading" style="display: none;">
+            <p>🔄 <em>AI가 답변을 생성 중입니다...</em></p>
+        </div>
+
+        <div id="result" style="display: none;"></div>
+    </div>
+  <script>
+    document.getElementById('diagnosis-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+
+      // 로딩 표시
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('result').innerHTML = '';
+
+      try {
+        const response = await fetch('http://localhost:8000/predict', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('result').innerHTML = `
+          <h3>예측 결과</h3>
+          <p><b>질환:</b> ${result.disease}</p>
+          <p><b>발병 기간:</b> ${result.duration}</p>
+          <div id="markdown-result">${marked.parse(result.treatment)}</div>
+        `;
+      } catch (error) {
+        document.getElementById('result').innerHTML = `<p>❌ 오류가 발생했습니다: ${error.message}</p>`;
+      } finally {
+        // 로딩 숨김
+        document.getElementById('loading').style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
