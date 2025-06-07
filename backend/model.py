@@ -8,27 +8,39 @@ from torchvision.models import resnet50, ResNet50_Weights
 
 # 학습용 데이터 df_train에서 실제 라벨 개수를 구함
 meta_cols = [
+    "rc_unknown",
+    "rc_rash",
+    "condition_symptoms_itching",
+    "other_symptoms_no_relevant_symptoms",
     "textures_raised_or_bumpy",
     "fitzpatrick_skin_type_encoded",
-    "sex_female",
-    "condition_symptoms_burning",
-    "body_parts_head_or_neck",
-    "body_parts_leg",
-    "textures_rough_or_flaky",
-    "condition_symptoms_darkening",
-    "condition_symptoms_bothersome_appearance",
-    "age_group_ordinal",
-    "condition_symptoms_increasing_size",
-    "body_parts_arm",
-    "other_symptoms_no_relevant_symptoms",
     "sex_other_or_unspecified",
-    "body_parts_foot_top_or_side",
-    "condition_symptoms_itching",
+    "age_group_ordinal",
+    "textures_rough_or_flaky",
+    "dermatologist_fitzpatrick_skin_type_label_2_encoded",
+    "dermatologist_fitzpatrick_skin_type_label_3_encoded",
     "race_ethnicity_white",
-    "body_parts_buttocks",
+    "condition_symptoms_bothersome_appearance",
+    "sex_female",
+    "body_parts_arm",
+    "body_parts_leg",
+    "condition_symptoms_increasing_size",
+    "condition_symptoms_darkening",
+    "condition_symptoms_burning",
+    "textures_flat",
+    "condition_symptoms_bleeding",
+    "body_parts_torso_front",
+    "sex_male",
+    "other_symptoms_fatigue",
+    "condition_symptoms_pain",
+    "dermatologist_fitzpatrick_skin_type_label_1_encoded",
+    "other_symptoms_joint_pain",
+    "body_parts_torso_back",
+    "body_parts_back_of_hand",
+    "body_parts_head_or_neck"
 ]
 onehot_cols_train = ["abrasion,_scrape,_or_scab","abscess","acne","actinic_keratosis","acute_and_chronic_dermatitis","acute_dermatitis,_nos","allergic_contact_dermatitis","basal_cell_carcinoma","bullous_pemphigoid","burn_of_skin","cd_-_contact_dermatitis","candida_intertrigo","cellulitis","chronic_dermatitis,_nos","condyloma_acuminatum","cutaneous_t_cell_lymphoma","cutaneous_larva_migrans","cutaneous_lupus","cutaneous_sarcoidosis","cyst","dermatofibroma","drug_rash","ecthyma","eczema","erythema_ab_igne","erythema_migrans","erythema_multiforme","folliculitis","geographic_tongue","granuloma_annulare","hemangioma","herpes_simplex","herpes_zoster","hidradenitis","hypersensitivity","impetigo","infected_eczema","inflicted_skin_lesions","insect_bite","intertrigo","irritant_contact_dermatitis","kaposi's_sarcoma_of_skin","keratosis_pilaris","leukocytoclastic_vasculitis","lichen_simplex_chronicus","lichen_nitidus","lichen_planus_lichenoid_eruption","lichen_spinulosus","livedo_reticularis","melanocytic_nevus","miliaria","molluscum_contagiosum","o_e_-_ecchymoses_present","onychomycosis","perioral_dermatitis","photodermatitis","pigmented_purpuric_eruption","pityriasis_lichenoides","pityriasis_rosea","porokeratosis","post-inflammatory_hyperpigmentation","prurigo_nodularis","psoriasis","purpura","rosacea","scc_sccis","sk_isk","scabies","scar_condition","seborrheic_dermatitis","skin_and_soft_tissue_atypical_mycobacterial_infection","skin_infection","stasis_dermatitis","superficial_wound_of_body_region","syphilis","tinea","tinea_versicolor","urticaria","vasculitis_of_the_skin","verruca_vulgaris","viral_exanthem","vitiligo","xerosis"]
-num_labels_train = 83
+num_labels_train = len(onehot_cols_train)
 print(f"Number of disease labels: {len(onehot_cols_train)}")  # e.g. 83
 # meta_cols를 위에서 이미 정의했으므로 그 길이를 사용
 num_meta_features = len(meta_cols)  # e.g. 31
