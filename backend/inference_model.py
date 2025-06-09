@@ -59,10 +59,14 @@ def predict_disease(image_bytes, meta):
     duration = duration_label[dur_idx] if 0 <= dur_idx < len(duration_label) else "unknown"
     disease  = idx_to_label[dis_idx]  if 0 <= dis_idx  < len(idx_to_label)  else "unknown"
 
-    client = genai.Client(api_key="*")
+    client = genai.Client(api_key="AIzaSyCSfdrLd6jzEIWQFNOLa0Owgi-4NhcCMns")
 
     response = client.models.generate_content(
-        model="gemini-2.0-flash", contents=f"""너는 피부 질병 전문가야. 사용자의 증상과 지속기간을 알려줄테니, 적합한 치료법을 추천해.
+        model="gemini-2.0-flash", contents=f"""너는 피부 질병 전문가야. 사용자의 증상과 경과 기간을 알려줄테니, 
+        증상의 일반적인 예상 회복 기간을 확인하고 사용자의 경과 시간과 비교하여, 
+        회복까지 남은 예상 회복 기간이 임계값을 초과할 경우 의료기관 방문을 권유해.
+        임계값을 초과하지 않았을 경우 증상의 경과 기간과 회복 예측 기간을 바탕으로 적절한 자가 치료 방법 또는 생활 습관 개선 팁을 제공해.
+
         답변 룰
         - 한국어로 답변
         - 답변만 작성하고, 다른 말은 하지 않아
@@ -76,7 +80,7 @@ def predict_disease(image_bytes, meta):
 
         입력
         - 증상: {disease}
-        - 지속 기간: {duration}
+        - 경과과 기간: {duration}
         """
     )
     print(response.text)
